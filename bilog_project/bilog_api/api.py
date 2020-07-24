@@ -16,11 +16,11 @@ def registration_view(request, format=None):
         serializer = RegistrationSerializer(data=request.data)
         data = {}
         if serializer.is_valid():
-            account = serializer.save()            
+            user = serializer.save()            
             data['response'] = 'u successfully register'
-            data['username'] = account.username
-            token = Token.objects.get(user=account.username).key
-            data['token'] = token
+            data['username'] = user.username
+            token, created = Token.objects.get_or_create(user=user.pk)
+            data['token'] = token.key
         else:
             data = serializer.errors
             return Response(data,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
