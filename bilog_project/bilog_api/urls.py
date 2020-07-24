@@ -6,7 +6,7 @@ from django.urls import path, re_path
 
 urlpatterns = [
     path('register/',api.registration_view),
-    # path('login/',api.login_view)
+    path('login/',api.login_view)
     # path('',UserDetail.as_view())
 ]
 
