@@ -60,13 +60,10 @@ def login_view(request, format=None):
 @permission_classes([IsAuthenticated])
 def list_chat_view(request,friendname):
     if request.method == "GET":    
-        queryset = Chat.objects.filter(sender=request.user,receiver=User.objects.get(username=friendname).id) #| Chat.objects.filter(receiver=friendname)
-        # serializer = ChatListSerializer(data=queryset)
-        # if serializer.is_valid():
-            # serialize('json', SomeModel.objects.all(), cls=LazyEncoder)
+        queryset = Chat.objects.filter(sender=request.user,receiver=User.objects.get(username=friendname).id) 
         serializer = ChatSerializer(queryset,many=True)
         return JsonResponse(serializer.data, status=status.HTTP_200_OK,safe=False)
-        # return Response(serializer.errors, status=status.HTTP_200_OK)
+        
         
     queryset = {'Invalid Request'}
     return Response(queryset, status=status.HTTP_400_BAD_REQUEST)
