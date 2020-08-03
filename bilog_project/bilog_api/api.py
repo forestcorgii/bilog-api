@@ -11,7 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework import generics
 
-from .serializers import RegistrationSerializer,ChatSerializer,ChatListSerializer
+from .serializers import RegistrationSerializer,ChatSerializer,ChatListSerializer,UserSearchResultSerializer
 from .models import Chat
 
 
@@ -63,11 +63,9 @@ def list_chat_view(request,friendname):
         queryset = Chat.objects.filter(sender=request.user,receiver=User.objects.get(username=friendname).id) 
         serializer = ChatSerializer(queryset,many=True)
         return JsonResponse(serializer.data, status=status.HTTP_200_OK,safe=False)
-        
-        
+                
     queryset = {'Invalid Request'}
     return Response(queryset, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 @api_view(['GET'])
@@ -81,9 +79,6 @@ def list_chat_preview(request):
         
     queryset = {'Invalid Request'}
     return Response(queryset, status=status.HTTP_400_BAD_REQUEST)
-
-
-    
 
 
 @api_view(['GET'])
@@ -110,4 +105,17 @@ def send_message(request):
         response = {
             'reponse': 'Invalid User Assignment',
         }
-        return Response(response,status=status.HTTP_400_BAD_REQUEST)
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def search_user_view(request):
+    if request.method == 'GET':
+        response = {}
+        data = User.objects.all().exclude(pk=request.user.id).filter(username__contains=request.GET['searchinput'])
+        serializer=UserSearchResultSerializer(data,many=True)
+        return JsonResponse(serializer.data, status=status.HTTP_200_OK, safe=False)
+
+

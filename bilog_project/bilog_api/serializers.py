@@ -44,3 +44,8 @@ class ChatListSerializer(serializers.ListSerializer):
         model = Chat
         fields = '__all__'
         
+
+class UserSearchResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=User
+        fields=['username','email']

@@ -8,6 +8,7 @@ urlpatterns = [
     path('send_message/', api.send_message),
     path('messages/<str:friendname>', api.list_chat_view),
     path('messages/', api.list_chat_preview),
+    path('search_user/',api.search_user_view),
 ]
 
 # urlpatterns += [
